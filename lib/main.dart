@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flychat/features/login_screen/login_screen.dart';
+import 'package:flychat/features/auth/login_screen/login_screen.dart';
+import 'package:flychat/features/auth/sign_up/sign_up.dart';
 import 'package:flychat/features/onboarding/onboarding_screen.dart';
 
 void main() {
@@ -17,8 +18,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => OnboardingScreen(),
         '/login': (context) => LoginScreen(),
+        '/signup': (context) => SignUp(),
       },
-      initialRoute: '/',
+      initialRoute: '/signup',
     );
   }
 }
