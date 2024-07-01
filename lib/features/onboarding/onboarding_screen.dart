@@ -1,55 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:flychat/features/values/dimens.dart';
 
 class OnboardingScreen extends StatelessWidget {
-  OnboardingScreen({super.key});
-
-  late double height;
-  late double width;
+  const OnboardingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.only(left: 20, right: 20),
+          padding: EdgeInsets.only(
+            left: Dimens.getDimen(20),
+            right: Dimens.getDimen(20),
+            top: Dimens.getDimen(20),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Spacer(
-                flex: 1,
-              ),
-              const Text(
+              Text(
                 'FlyChat',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: Dimens.getDimen(20),
+                ),
               ),
-              const Spacer(
-                flex: 2,
+              SizedBox(
+                height: Dimens.getDimen(50),
               ),
-              const Text(
+              Text(
                 'Connect Friends easily and quickly',
-                style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: Dimens.getDimen(60),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              const Spacer(
-                flex: 2,
+              SizedBox(
+                height: Dimens.getDimen(25),
               ),
-              const Text(
+              Text(
                 'Our Chat app is the perfect way to stay connected with friends and family.',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  fontSize: Dimens.getDimen(17),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-              const Spacer(
-                flex: 5,
-              ),
-              _signUpWithMail(width, context),
-              const Spacer(
-                flex: 1,
+              const Spacer(),
+              _signUpWithMail(context),
+              SizedBox(
+                height: Dimens.getDimen(10),
               ),
               _login(context),
-              const Spacer(
-                flex: 1,
-              )
+              SizedBox(
+                height: Dimens.getDimen(20),
+              ),
             ],
           ),
         ),
@@ -58,10 +61,10 @@ class OnboardingScreen extends StatelessWidget {
   }
 }
 
-Widget _signUpWithMail(double width, BuildContext context) {
+Widget _signUpWithMail(BuildContext context) {
   return SizedBox(
-    width: width,
-    height: 50,
+    width: double.infinity,
+    height: Dimens.getDimen(50),
     child: ElevatedButton(
       onPressed: () => Navigator.pushNamed(context, '/signup'),
       child: const Text(

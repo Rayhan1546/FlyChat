@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flychat/features/auth/sign_up/sign_up_viewmodel.dart';
 import 'package:flychat/features/auth/widgets/my_text_field.dart';
 import 'package:flychat/features/auth/widgets/password_field.dart';
+import 'package:flychat/features/values/dimens.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({super.key});
@@ -15,56 +16,55 @@ class SignUp extends StatelessWidget {
         child: Container(
           height: double.infinity,
           width: double.infinity,
-          margin: const EdgeInsets.only(left: 20, right: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Spacer(
-                flex: 1,
-              ),
-              _backButton(context),
-              const Spacer(
-                flex: 2,
-              ),
-              const Text(
-                'Sign up with Email',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+          margin: EdgeInsets.only(
+            left: Dimens.getDimen(20),
+            right: Dimens.getDimen(20),
+            top: Dimens.getDimen(20),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _backButton(context),
+                SizedBox(
+                  height: Dimens.getDimen(40),
                 ),
-              ),
-              const Spacer(
-                flex: 1,
-              ),
-              const Text(
-                'Get chatting with friends and family today by signing up for our chat app!',
-                textAlign: TextAlign.center,
-              ),
-              const Spacer(
-                flex: 2,
-              ),
-              _nameTextField(context),
-              const Spacer(
-                flex: 1,
-              ),
-              _emailTextField(context),
-              const Spacer(
-                flex: 1,
-              ),
-              _password1TextField(context),
-              const Spacer(
-                flex: 1,
-              ),
-              _password2TextField(context),
-              const Spacer(
-                flex: 5,
-              ),
-              _createAccountButton(context),
-              const Spacer(
-                flex: 2,
-              ),
-            ],
+                Text(
+                  'Sign up with Email',
+                  style: TextStyle(
+                    fontSize: Dimens.getDimen(22),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: Dimens.getDimen(20),
+                ),
+                const Text(
+                  'Get chatting with friends and family today by signing up for our chat app!',
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: Dimens.getDimen(60),
+                ),
+                _nameTextField(context),
+                SizedBox(
+                  height: Dimens.getDimen(20),
+                ),
+                _emailTextField(context),
+                SizedBox(
+                  height: Dimens.getDimen(20),
+                ),
+                _password1TextField(context),
+                SizedBox(
+                  height: Dimens.getDimen(20),
+                ),
+                _password2TextField(context),
+                SizedBox(
+                  height: Dimens.getDimen(100),
+                ),
+                _createAccountButton(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -132,11 +132,11 @@ class SignUp extends StatelessWidget {
 
   Widget _createAccountButton(BuildContext context) {
     return SizedBox(
-      width: 350,
-      height: 50,
+      width: double.infinity,
+      height: Dimens.getDimen(50),
       child: ElevatedButton(
         onPressed: () {},
-        child: const Text('Login'),
+        child: const Text('Create an account'),
       ),
     );
   }

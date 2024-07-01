@@ -1,72 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:flychat/features/auth/login_screen/login_screen_viewmodel.dart';
+import 'package:flychat/features/auth/login/login_screen_viewmodel.dart';
 import 'package:flychat/features/auth/widgets/my_text_field.dart';
 import 'package:flychat/features/auth/widgets/password_field.dart';
+import 'package:flychat/features/values/dimens.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
-
-  late double height;
-  late double width;
 
   LoginScreenViewmodel viewmodel = LoginScreenViewmodel.getInstance();
 
   @override
   Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       body: SafeArea(
         child: Container(
-          margin: const EdgeInsets.only(left: 20, right: 20),
+          margin: EdgeInsets.only(
+            left: Dimens.getDimen(20),
+            right: Dimens.getDimen(20),
+            top: Dimens.getDimen(20),
+          ),
           height: double.infinity,
           width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Spacer(
-                flex: 1,
-              ),
-              _backButton(context),
-              const Spacer(
-                flex: 2,
-              ),
-              const Text(
-                'Log in to FlyChat',
-                style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 22,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _backButton(context),
+                SizedBox(
+                  height: Dimens.getDimen(50),
                 ),
-              ),
-              const Spacer(
-                flex: 1,
-              ),
-              const Text(
-                'Welcome Back, Please login using your email to continue with us',
-                textAlign: TextAlign.center,
-              ),
-              const Spacer(
-                flex: 3,
-              ),
-              _emailTextField(),
-              const Spacer(
-                flex: 1,
-              ),
-              _passwordTextField(),
-              const Spacer(
-                flex: 6,
-              ),
-              _loginButton(height, width),
-              const Spacer(
-                flex: 1,
-              ),
-              _forgetPassword(),
-              const Spacer(
-                flex: 1,
-              ),
-            ],
+                Text(
+                  'Log in to FlyChat',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: Dimens.getDimen(22),
+                  ),
+                ),
+                SizedBox(
+                  height: Dimens.getDimen(20),
+                ),
+                const Text(
+                  'Welcome Back, Please login using your email to continue with us',
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: Dimens.getDimen(120),
+                ),
+                _emailTextField(),
+                SizedBox(
+                  height: Dimens.getDimen(20),
+                ),
+                _passwordTextField(),
+                SizedBox(
+                  height: Dimens.getDimen(130),
+                ),
+                _loginButton(context),
+                SizedBox(
+                  height: Dimens.getDimen(10),
+                ),
+                _forgetPassword(),
+              ],
+            ),
           ),
         ),
       ),
@@ -80,8 +74,8 @@ class LoginScreen extends StatelessWidget {
         offset: const Offset(-10, 0),
         child: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(
-            size: 30,
+          icon: Icon(
+            size: Dimens.getDimen(30),
             Icons.arrow_back,
           ),
         ),
@@ -113,12 +107,13 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _loginButton(double height, double width) {
+  Widget _loginButton(BuildContext context) {
     return SizedBox(
-      width: 350,
-      height: 50,
+      width: double.infinity,
+      height: Dimens.getDimen(50),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () => Navigator.pushNamedAndRemoveUntil(
+            context, '/home', (route) => false),
         child: const Text('Login'),
       ),
     );
