@@ -112,8 +112,7 @@ class LoginScreen extends StatelessWidget {
       width: double.infinity,
       height: Dimens.getDimen(50),
       child: ElevatedButton(
-        onPressed: () => Navigator.pushNamedAndRemoveUntil(
-            context, '/home', (route) => false),
+        onPressed: () => viewmodel.onCLickLogin(context),
         child: const Text('Login'),
       ),
     );

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flychat/auth_service/supabase_servce.dart';
 import 'package:flychat/features/auth/validators/email_validators.dart';
 import 'package:flychat/features/auth/validators/password_validators.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreenViewmodel {
   static LoginScreenViewmodel? loginScreenViewmodel;
@@ -34,5 +36,19 @@ class LoginScreenViewmodel {
       return;
     }
     passwordErrorText.value = null;
+  }
+
+  void onCLickLogin(BuildContext context) async {
+    String email = emailController.text;
+    String password = passwordController.text;
+    if (email.isEmpty || password.isEmpty) {
+      return;
+    }
+
+    final loginResponse = await SupabaseServce.signIn(email, password);
+
+    if (loginResponse == true) {
+      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flychat/chat_page/chat_screen.dart';
 import 'package:flychat/features/auth/login/login.dart';
 import 'package:flychat/features/auth/sign_up/sign_up.dart';
 import 'package:flychat/features/home/home_screen.dart';
@@ -14,7 +15,8 @@ void main() async {
 
   await dotenv.load(fileName: ".env");
 
-  final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
+  final appDocumentDirectory =
+      await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
 
   await Supabase.initialize(
@@ -39,8 +41,9 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignUp(),
         '/home': (context) => HomeScreen(),
+        '/chat': (context) => ChatScreen(),
       },
-      initialRoute: '/',
+      initialRoute: '/home',
     );
   }
 }

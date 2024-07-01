@@ -135,7 +135,7 @@ class SignUp extends StatelessWidget {
       width: double.infinity,
       height: Dimens.getDimen(50),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () => viewmodel.onCLickSignUp(context),
         child: const Text('Create an account'),
       ),
     );
