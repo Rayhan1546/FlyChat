@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flychat/auth_service/supabase_servce.dart';
+import 'package:flychat/auth_service/supabase_auth_servce.dart';
 import 'package:flychat/features/auth/validators/email_validators.dart';
 import 'package:flychat/features/auth/validators/password_validators.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -47,8 +47,12 @@ class LoginScreenViewmodel {
 
     final loginResponse = await SupabaseServce.signIn(email, password);
 
-    if (loginResponse == true) {
+    final databaseResponse = await SupabaseServce.doesUserDataExist();
+
+    if (loginResponse == true && databaseResponse == true) {
       Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+    } else {
+      Navigator.pushNamed(context, '/profile');
     }
   }
 }

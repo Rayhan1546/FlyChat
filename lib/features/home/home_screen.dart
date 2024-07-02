@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flychat/auth_service/supabase_auth_servce.dart';
 import 'package:flychat/features/home/home_screen_viewmodel.dart';
 import 'package:flychat/features/values/dimens.dart';
 import 'package:intl/intl.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flychat/auth_service/supabase_servce.dart';
+import 'package:flychat/auth_service/supabase_auth_servce.dart';
 import 'package:flychat/features/auth/validators/email_validators.dart';
 import 'package:flychat/features/auth/validators/password_validators.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
