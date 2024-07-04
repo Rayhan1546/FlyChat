@@ -1,9 +1,5 @@
-import 'dart:typed_data';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flychat/features/auth/widgets/my_text_field.dart';
-import 'package:flychat/features/profile_name/profile_viewmodel.dart';
+import 'package:flychat/features/profile/profile_viewmodel.dart';
 import 'package:flychat/features/values/dimens.dart';
 
 class ProfileName extends StatelessWidget {
@@ -83,7 +79,7 @@ class ProfileName extends StatelessWidget {
           ClipOval(
             child: image != null
                 ? Image.file(
-                    image!,
+                    image,
                     width: Dimens.getDimen(140),
                     height: Dimens.getDimen(140),
                     fit: BoxFit.cover,

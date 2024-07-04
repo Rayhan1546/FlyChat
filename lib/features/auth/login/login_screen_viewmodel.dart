@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flychat/auth_service/supabase_auth_servce.dart';
+import 'package:flychat/Supabase/auth_service/auth_repo_impl.dart';
+import 'package:flychat/Supabase/auth_service/auth_repository.dart';
 import 'package:flychat/features/auth/validators/email_validators.dart';
 import 'package:flychat/features/auth/validators/password_validators.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginScreenViewmodel {
   static LoginScreenViewmodel? loginScreenViewmodel;
@@ -11,6 +11,8 @@ class LoginScreenViewmodel {
     loginScreenViewmodel ??= LoginScreenViewmodel();
     return loginScreenViewmodel!;
   }
+
+  AuthRepository authRepository = AuthRepoImpl();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -45,14 +47,18 @@ class LoginScreenViewmodel {
       return;
     }
 
-    final loginResponse = await SupabaseServce.signIn(email, password);
+    final loginResponse = await authRepository.signIn(email, password);
 
-    final databaseResponse = await SupabaseServce.doesUserDataExist();
+    final databaseResponse = await authRepository.doesUserExist();
 
-    if (loginResponse == true && databaseResponse == true) {
+    if (loginResponse && databaseResponse) {
       Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
     } else {
       Navigator.pushNamed(context, '/profile');
     }
+  }
+
+  void onClickForgetPassword(BuildContext context) {
+    Navigator.pushNamed(context, '/forget_password');
   }
 }

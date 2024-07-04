@@ -58,7 +58,7 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(
                   height: Dimens.getDimen(10),
                 ),
-                _forgetPassword(),
+                _forgetPassword(context),
               ],
             ),
           ),
@@ -118,9 +118,9 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _forgetPassword() {
+  Widget _forgetPassword(BuildContext context) {
     return TextButton(
-      onPressed: () {},
+      onPressed: () => viewmodel.onClickForgetPassword(context),
       child: const Text(
         'Forget password?',
         style: TextStyle(fontWeight: FontWeight.bold),

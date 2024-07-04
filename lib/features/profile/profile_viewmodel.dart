@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flychat/auth_service/supabase_auth_servce.dart';
+import 'package:flychat/Supabase/database_service/database_repo_impl.dart';
+import 'package:flychat/Supabase/database_service/database_repository.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileNameViewmodel {
+  DatabaseRepository databaseRepository = DatabaseRepoImpl();
+
   TextEditingController nameController = TextEditingController();
 
   final ImagePicker _picker = ImagePicker();
@@ -16,9 +19,11 @@ class ProfileNameViewmodel {
       final fileName = image.value!.path.split('/').last;
       final filePath = 'images/$fileName';
 
-      final imageUrl = await SupabaseServce.uploadPicture(image.value!, filePath);
+      final imageUrl =
+          await databaseRepository.uploadPicture(image.value!, filePath);
 
-      bool response = await SupabaseServce.insertDataIntoProfile(name, imageUrl!);
+      bool response =
+          await databaseRepository.insertDataIntoProfile(name, imageUrl!);
 
       if (response) {
         Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
@@ -31,7 +36,6 @@ class ProfileNameViewmodel {
   }
 
   Future<void> pickImage() async {
-    print('hello');
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       image.value = File(pickedFile.path);

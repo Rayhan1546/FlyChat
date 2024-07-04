@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flychat/auth_service/supabase_auth_servce.dart';
-import 'package:flychat/chat_page/chat_screen.dart';
+import 'package:flychat/Supabase/auth_service/auth_repo_impl.dart';
+import 'package:flychat/Supabase/auth_service/auth_repository.dart';
+import 'package:flychat/features/auth/forget_password/forget_password_ui.dart';
 import 'package:flychat/features/auth/login/login.dart';
 import 'package:flychat/features/auth/sign_up/sign_up.dart';
+import 'package:flychat/features/chat_page/chat_screen.dart';
 import 'package:flychat/features/home/home_screen.dart';
+import 'package:flychat/features/home/message_screen.dart';
 import 'package:flychat/features/onboarding/onboarding_screen.dart';
-import 'package:flychat/features/profile_name/profile.dart';
+import 'package:flychat/features/profile/profile.dart';
+import 'package:flychat/features/settings/settings_ui.dart';
 import 'package:flychat/features/values/screen_util.dart';
 import 'package:hive/hive.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -26,15 +30,17 @@ void main() async {
     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
 
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  AuthRepository authRepository = AuthRepoImpl();
 
   @override
   Widget build(BuildContext context) {
-    bool isLogged = SupabaseServce.isUserLogged();
+    bool isLogged = authRepository.isUserLoggedIn();
     ScreenUtil.init(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -46,8 +52,10 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomeScreen(),
         '/chat': (context) => ChatScreen(),
         '/profile': (context) => ProfileName(),
+        '/settings': (context) => SettingsUi(),
+        '/forget_password': (context) => ForgetPasswordUi(),
       },
-      //initialRoute: '/profile',
+      //initialRoute: '/forget_password',
       initialRoute: isLogged ? '/home' : '/',
     );
   }
