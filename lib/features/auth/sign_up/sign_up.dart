@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flychat/features/auth/sign_up/sign_up_viewmodel.dart';
 import 'package:flychat/features/auth/widgets/my_text_field.dart';
 import 'package:flychat/features/auth/widgets/password_field.dart';
-import 'package:flychat/features/values/dimens.dart';
+import 'package:flychat/util/values/dimens.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({super.key});

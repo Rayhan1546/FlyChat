@@ -1,28 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flychat/Supabase/database_service/database_repo_impl.dart';
-import 'package:flychat/Supabase/database_service/database_repository.dart';
+import 'package:flychat/data/repository/database_repository/database_repo_impl.dart';
+import 'package:flychat/data/repository/database_repository/database_repository.dart';
+import 'package:flychat/data/response_models/user_model.dart';
+import 'package:flychat/features/chat_page/widgets/chat_screen_arguments.dart';
 import 'package:flychat/features/home/widgets/bottom_navigation_item.dart';
 
 class HomeScreenViewmodel {
+  HomeScreenViewmodel._privateConstructor();
 
-  static HomeScreenViewmodel? homeScreenViewmodel;
+  static final HomeScreenViewmodel _instance =
+      HomeScreenViewmodel._privateConstructor();
 
-  static HomeScreenViewmodel getInstance() {
-    homeScreenViewmodel ??= HomeScreenViewmodel();
-    return homeScreenViewmodel!;
+  factory HomeScreenViewmodel() {
+    return _instance;
   }
 
-  ValueNotifier<String?> imageUrl = ValueNotifier<String?>(null);
+  ValueNotifier<UserModel?> userData = ValueNotifier<UserModel?>(null);
+
+  ValueNotifier<List<UserModel>?> usersData = ValueNotifier(null);
 
   DatabaseRepository databaseRepository = DatabaseRepoImpl();
 
-  Future<void> fetchProfilePicture() async {
-    final url = await databaseRepository.getProfilePicture();
-    imageUrl.value = url;
+  final PageController pageController = PageController();
+
+  Future<void> fetchUserData() async {
+    final user = await databaseRepository.getCurrentUserData();
+    userData.value = user;
   }
 
-  ValueNotifier<NavigationItemType> selectedItem = ValueNotifier<NavigationItemType>(NavigationItemType.messages);
+  Future<void> getUsers() async {
+    List<UserModel> users = await databaseRepository.getUsers();
+
+    usersData.value = users;
+  }
+
+  ValueNotifier<NavigationItemType> selectedItem =
+      ValueNotifier<NavigationItemType>(NavigationItemType.messages);
 
   void onItemTapped(int index) {
     pageController.animateToPage(
@@ -33,9 +47,19 @@ class HomeScreenViewmodel {
     selectedItem.value = NavigationItemType.values[index];
   }
 
-  final PageController pageController = PageController();
-
   void onPageChanged(int index) {
     selectedItem.value = NavigationItemType.values[index];
+  }
+
+  void onClickUser(String userId, BuildContext context) async {
+    final roomId = await databaseRepository.getChatRoomId(userId);
+
+    if (roomId != null) {
+      Navigator.pushNamed(
+        context,
+        '/chat',
+        arguments: ChatScreenArguments(roomId: roomId, receiverId: userId),
+      );
+    }
   }
 }

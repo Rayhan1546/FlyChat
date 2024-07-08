@@ -1,4 +1,5 @@
-import 'package:flychat/features/values/screen_util.dart';
+
+import 'package:flychat/util/values/screen_util.dart';
 
 class Dimens {
   static final Map<int, double> _dimens = {};

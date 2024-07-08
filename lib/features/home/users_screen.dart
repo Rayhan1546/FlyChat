@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flychat/features/chat_page/widgets/chat_screen_arguments.dart';
 import 'package:flychat/features/home/home_screen_viewmodel.dart';
 import 'package:flychat/features/home/widgets/drawer.dart';
-import 'package:flychat/features/values/dimens.dart';
+import 'package:flychat/util/values/dimens.dart';
 import 'package:intl/intl.dart';
 
-class MessageScreen extends StatelessWidget {
-  MessageScreen({super.key});
+class UsersScreen extends StatelessWidget {
+  UsersScreen({super.key});
 
-  HomeScreenViewmodel viewmodel = HomeScreenViewmodel.getInstance();
+  HomeScreenViewmodel viewmodel = HomeScreenViewmodel();
 
   ValueNotifier<bool> isVisibleNotifier = ValueNotifier(false);
 
@@ -17,12 +18,15 @@ class MessageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    viewmodel.fetchProfilePicture();
+    viewmodel.fetchUserData();
+    viewmodel.getUsers();
     return Scaffold(
       body: SafeArea(
         child: Container(
           margin: EdgeInsets.only(
-              left: Dimens.getDimen(20), right: Dimens.getDimen(20)),
+            left: Dimens.getDimen(20),
+            right: Dimens.getDimen(20),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -66,19 +70,19 @@ class MessageScreen extends StatelessWidget {
           ),
           const Spacer(),
           ValueListenableBuilder(
-            valueListenable: viewmodel.imageUrl,
-            builder: (context, imageUrl, _) => IconButton(
+            valueListenable: viewmodel.userData,
+            builder: (context, user, _) => IconButton(
               onPressed: () => bottomSheetUi(context),
-              icon: imageUrl == null
-                  ? const CircularProgressIndicator()
-                  : ClipOval(
+              icon: user?.profilePictureUrl != null
+                  ? ClipOval(
                       child: Image.network(
-                        imageUrl,
+                        user!.profilePictureUrl,
                         width: Dimens.getDimen(40),
                         height: Dimens.getDimen(40),
                         fit: BoxFit.cover,
                       ),
-                    ),
+                    )
+                  : const CircularProgressIndicator(),
             ),
           ),
         ],
@@ -93,7 +97,7 @@ class MessageScreen extends StatelessWidget {
         style: TextStyle(),
         decoration: InputDecoration(
           hintText: 'Search people...',
-          suffixIcon: const Icon(
+          suffixIcon: Icon(
             Icons.search,
           ),
           fillColor: Colors.black12,
@@ -116,25 +120,41 @@ class MessageScreen extends StatelessWidget {
     DateTime now = DateTime.now();
     String time = DateFormat('hh:mm a').format(now);
 
-    return Expanded(
-      child: ListView.builder(
-        itemCount: 20,
-        itemBuilder: (context, index) => ListTile(
-          onTap: () => Navigator.pushNamed(context, '/chat'),
-          contentPadding: EdgeInsets.zero,
-          leading: const Icon(Icons.account_circle),
-          title: const Text('Hello list'),
-          subtitle: const Text('This is your message'),
-          trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(time),
-              const Text(
-                '2',
-                textAlign: TextAlign.left,
+    return ValueListenableBuilder(
+      valueListenable: viewmodel.usersData,
+      builder: (context, users, _) => Expanded(
+        child: ListView.builder(
+          itemCount: users?.length,
+          itemBuilder: (context, index) => ListTile(
+            onTap: () => viewmodel.onClickUser(users![index].id, context),
+            contentPadding: EdgeInsets.zero,
+            leading: Container(
+              width: Dimens.getDimen(35),
+              height: Dimens.getDimen(35),
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                  image: NetworkImage(
+                    users?[index].profilePictureUrl ?? '',
+                  ),
+                  fit: BoxFit.cover,
+                ),
               ),
-            ],
+            ),
+            title: Text(users?[index].username ?? ''),
+            subtitle: const Text('This is your message'),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(time),
+                const Text(
+                  '2',
+                  textAlign: TextAlign.left,
+                ),
+              ],
+            ),
           ),
         ),
       ),

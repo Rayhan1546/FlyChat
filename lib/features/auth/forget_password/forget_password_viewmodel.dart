@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flychat/Supabase/auth_service/auth_repo_impl.dart';
-import 'package:flychat/Supabase/auth_service/auth_repository.dart';
+import 'package:flychat/data/repository/auth_repository/auth_repo_impl.dart';
+import 'package:flychat/data/repository/auth_repository/auth_repository.dart';
 
 class ForgetPasswordViewmodel {
   TextEditingController emailController = TextEditingController();
@@ -16,6 +16,7 @@ class ForgetPasswordViewmodel {
           content: Text('Succes'),
         ),
       );
+      emailController.clear();
       Navigator.pushNamed(context, '/login');
     }
     else{

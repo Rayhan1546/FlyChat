@@ -1,11 +1,36 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flychat/features/profile/profile_viewmodel.dart';
-import 'package:flychat/features/values/dimens.dart';
+import 'package:flychat/util/values/dimens.dart';
 
-class ProfileName extends StatelessWidget {
-  ProfileName({super.key});
+class ProfileName extends StatefulWidget {
+  const ProfileName({super.key});
 
-  ProfileNameViewmodel viewmodel = ProfileNameViewmodel();
+  @override
+  _ProfileNameState createState() => _ProfileNameState();
+}
+
+class _ProfileNameState extends State<ProfileName> {
+  final ProfileNameViewmodel viewmodel = ProfileNameViewmodel();
+
+  @override
+  void initState() {
+    super.initState();
+    // Add a listener to the image ValueNotifier to trigger a rebuild when it changes
+    viewmodel.image.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    // Dispose of the TextEditingController and remove the listener
+    viewmodel.nameController.dispose();
+    viewmodel.image.removeListener(() {
+      setState(() {});
+    });
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +47,7 @@ class ProfileName extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _backButton(context),
-              const Spacer(
-                flex: 2,
-              ),
+              const Spacer(flex: 2),
               Text(
                 'Please enter your details',
                 style: TextStyle(
@@ -32,21 +55,13 @@ class ProfileName extends StatelessWidget {
                   fontSize: Dimens.getDimen(18),
                 ),
               ),
-              const Spacer(
-                flex: 2,
-              ),
+              const Spacer(flex: 2),
               _imagePicker(context),
-              const Spacer(
-                flex: 2,
-              ),
+              const Spacer(flex: 2),
               _nameTextField(context),
-              const Spacer(
-                flex: 4,
-              ),
+              const Spacer(flex: 4),
               _submitButton(context),
-              const Spacer(
-                flex: 6,
-              ),
+              const Spacer(flex: 6),
             ],
           ),
         ),
@@ -71,7 +86,7 @@ class ProfileName extends StatelessWidget {
   }
 
   Widget _imagePicker(BuildContext context) {
-    return ValueListenableBuilder(
+    return ValueListenableBuilder<File?>(
       valueListenable: viewmodel.image,
       builder: (context, image, _) => Stack(
         alignment: Alignment.bottomRight,
@@ -79,17 +94,17 @@ class ProfileName extends StatelessWidget {
           ClipOval(
             child: image != null
                 ? Image.file(
-                    image,
-                    width: Dimens.getDimen(140),
-                    height: Dimens.getDimen(140),
-                    fit: BoxFit.cover,
-                  )
+              image,
+              width: Dimens.getDimen(140),
+              height: Dimens.getDimen(140),
+              fit: BoxFit.cover,
+            )
                 : Image.network(
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpDqID8tFzQI6zdjODUNBO1gQjfrYtonjJRw&s',
-                    width: Dimens.getDimen(140),
-                    height: Dimens.getDimen(140),
-                    fit: BoxFit.cover,
-                  ),
+              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpDqID8tFzQI6zdjODUNBO1gQjfrYtonjJRw&s',
+              width: Dimens.getDimen(140),
+              height: Dimens.getDimen(140),
+              fit: BoxFit.cover,
+            ),
           ),
           Positioned(
             bottom: 0,
@@ -100,10 +115,12 @@ class ProfileName extends StatelessWidget {
                 width: Dimens.getDimen(30),
                 height: Dimens.getDimen(30),
                 decoration: const BoxDecoration(
-                    shape: BoxShape.circle, color: Colors.black),
+                  shape: BoxShape.circle,
+                  color: Colors.black,
+                ),
                 child: Icon(
                   Icons.camera_alt,
-                  size: Dimens.getDimen(30),
+                  size: Dimens.getDimen(20),
                 ),
               ),
             ),
@@ -129,7 +146,7 @@ class ProfileName extends StatelessWidget {
       width: double.infinity,
       height: Dimens.getDimen(50),
       child: ElevatedButton(
-        onPressed: () => viewmodel.onClickSubmitName(context),
+        onPressed: () => viewmodel.onClickSubmitButton(context),
         child: const Text('Submit'),
       ),
     );

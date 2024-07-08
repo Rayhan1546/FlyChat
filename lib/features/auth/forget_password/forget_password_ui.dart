@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flychat/features/auth/forget_password/forget_password_viewmodel.dart';
-import 'package:flychat/features/values/dimens.dart';
+import 'package:flychat/util/values/dimens.dart';
 
 class ForgetPasswordUi extends StatelessWidget {
   ForgetPasswordUi({super.key});

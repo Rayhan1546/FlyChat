@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flychat/features/settings/settings_viewmodel.dart';
 import 'package:flychat/features/settings/widgets/language_dialog_box_ui.dart';
 import 'package:flychat/features/settings/widgets/theme_dialog_box_ui.dart';
-import 'package:flychat/features/values/dimens.dart';
+import 'package:flychat/util/values/dimens.dart';
 
 class SettingsUi extends StatelessWidget {
   SettingsUi({super.key});
@@ -35,11 +35,11 @@ class SettingsUi extends StatelessWidget {
               ),
               _nameTile(context),
               SizedBox(
-                height: Dimens.getDimen(15),
+                height: Dimens.getDimen(5),
               ),
               _themeTile(context),
               SizedBox(
-                height: Dimens.getDimen(15),
+                height: Dimens.getDimen(5),
               ),
               _languageTile(context),
               SizedBox(
@@ -120,12 +120,15 @@ class SettingsUi extends StatelessWidget {
   }
 
   Widget _logOutButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: Dimens.getDimen(50),
-      child: ElevatedButton(
-        onPressed: () => viewmodel.onClickLogOutButton(context),
-        child: const Text('Logout'),
+    return Align(
+      alignment: Alignment.center,
+      child: SizedBox(
+        width: Dimens.getDimen(250),
+        height: Dimens.getDimen(50),
+        child: ElevatedButton(
+          onPressed: () => viewmodel.onClickLogOutButton(context),
+          child: const Text('Logout'),
+        ),
       ),
     );
   }

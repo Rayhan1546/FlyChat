@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flychat/Supabase/auth_service/auth_repo_impl.dart';
-import 'package:flychat/Supabase/auth_service/auth_repository.dart';
+import 'package:flychat/data/repository/auth_repository/auth_repo_impl.dart';
+import 'package:flychat/data/repository/auth_repository/auth_repository.dart';
 import 'package:flychat/features/auth/validators/email_validators.dart';
 import 'package:flychat/features/auth/validators/password_validators.dart';
 
@@ -64,6 +64,10 @@ class SignUpViewmodel {
     bool signUpResponse = await authRepository.createNewUser(email, password);
 
     if (signUpResponse == true) {
+      nameController.clear();
+      emailController.clear();
+      password1Controller.clear();
+      password2Controller.clear();
       Navigator.pushNamed(context, '/login');
     }
   }

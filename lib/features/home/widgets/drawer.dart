@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flychat/features/values/dimens.dart';
+import 'package:flychat/data/response_models/user_model.dart';
+import 'package:flychat/features/home/home_screen_viewmodel.dart';
+import 'package:flychat/util/values/dimens.dart';
+
+HomeScreenViewmodel viewmodel = HomeScreenViewmodel();
 
 bottomSheetUi(BuildContext context) {
   showModalBottomSheet<void>(
@@ -10,12 +14,14 @@ bottomSheetUi(BuildContext context) {
         child: Container(
           width: double.infinity,
           height: MediaQuery.of(context).size.height / 2,
-          padding: EdgeInsets.all(Dimens.getDimen(20)),
+          padding: EdgeInsets.all(
+            Dimens.getDimen(25),
+          ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Settings',
+                'Profile Details',
                 style: TextStyle(
                   fontSize: Dimens.getDimen(22),
                   color: Colors.white,
@@ -25,22 +31,112 @@ bottomSheetUi(BuildContext context) {
               const SizedBox(
                 height: 10,
               ),
-              const Text(
-                'Theme',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
+              _userdetails(context),
             ],
           ),
         ),
       );
     },
   );
+}
 
-  Widget _themeSetting(BuildContext context) {
-    return Column();
-  }
+Widget _userdetails(BuildContext context) {
+  return ValueListenableBuilder(
+    valueListenable: viewmodel.userData,
+    builder: (context, user, _) => Column(
+      children: [
+        IconButton(
+          onPressed: () => bottomSheetUi(context),
+          icon: user == null
+              ? const CircularProgressIndicator()
+              : ClipOval(
+                  child: Image.network(
+                    user.profilePictureUrl,
+                    width: Dimens.getDimen(130),
+                    height: Dimens.getDimen(130),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+        ),
+        SizedBox(
+          height: Dimens.getDimen(12),
+        ),
+        _activeStatus(context, user!),
+        SizedBox(
+          height: Dimens.getDimen(7),
+        ),
+        _name(context, user),
+        SizedBox(
+          height: Dimens.getDimen(7),
+        ),
+        _createdAt(context, user),
+      ],
+    ),
+  );
+}
+
+Widget _activeStatus(BuildContext context, UserModel user) {
+  return Row(
+    children: [
+      Text(
+        'Active_Status:',
+        style: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: Dimens.getDimen(17),
+        ),
+      ),
+      const Spacer(),
+      Text(
+        'active',
+        style: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: Dimens.getDimen(17),
+        ),
+      ),
+    ],
+  );
+}
+
+Widget _name(BuildContext context, UserModel user) {
+  return Row(
+    children: [
+      Text(
+        'Name:',
+        style: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: Dimens.getDimen(17),
+        ),
+      ),
+      const Spacer(),
+      Text(
+        user.username,
+        style: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: Dimens.getDimen(17),
+        ),
+      ),
+    ],
+  );
+}
+
+Widget _createdAt(BuildContext context, UserModel user) {
+  return Row(
+    children: [
+      Text(
+        'Created_At:',
+        style: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: Dimens.getDimen(17),
+        ),
+      ),
+      const Spacer(),
+      Text(
+        user.createdAt.substring(0, 10),
+        style: TextStyle(
+          fontWeight: FontWeight.w400,
+          fontSize: Dimens.getDimen(17),
+        ),
+      ),
+    ],
+  );
 }

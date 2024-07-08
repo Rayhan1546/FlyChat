@@ -5,7 +5,7 @@ import 'package:flychat/features/home/home_screen_viewmodel.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  HomeScreenViewmodel viewmodel = HomeScreenViewmodel.getInstance();
+  HomeScreenViewmodel viewmodel = HomeScreenViewmodel();
 
   @override
   Widget build(BuildContext context) {

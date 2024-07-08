@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flychat/Supabase/auth_service/auth_repo_impl.dart';
-import 'package:flychat/Supabase/auth_service/auth_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:flychat/data/repository/auth_repository/auth_repo_impl.dart';
+import 'package:flychat/data/repository/auth_repository/auth_repository.dart';
 import 'package:flychat/features/auth/validators/email_validators.dart';
 import 'package:flychat/features/auth/validators/password_validators.dart';
 
@@ -51,10 +51,23 @@ class LoginScreenViewmodel {
 
     final databaseResponse = await authRepository.doesUserExist();
 
+    if (loginResponse) {
+      emailController.clear();
+      passwordController.clear();
+    }
+
     if (loginResponse && databaseResponse) {
       Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-    } else {
+    }
+
+    if (loginResponse && databaseResponse == false) {
       Navigator.pushNamed(context, '/profile');
+    }
+
+    if (!loginResponse) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Invalid password or email'),
+      ));
     }
   }
 

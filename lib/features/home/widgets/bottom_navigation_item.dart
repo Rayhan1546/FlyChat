@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flychat/features/home/message_screen.dart';
+import 'package:flychat/features/home/users_screen.dart';
 import 'package:flychat/features/settings/settings_ui.dart';
 
 enum NavigationItemType {
@@ -27,7 +27,7 @@ enum NavigationItemType {
   Widget get page {
     switch (this) {
       case NavigationItemType.messages:
-        return MessageScreen();
+        return UsersScreen();
       case NavigationItemType.settings:
         return SettingsUi();
     }

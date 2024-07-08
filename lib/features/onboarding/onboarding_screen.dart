@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flychat/features/values/dimens.dart';
+import 'package:flychat/util/values/dimens.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
