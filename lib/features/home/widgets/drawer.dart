@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flychat/data/response_models/user_model.dart';
 import 'package:flychat/features/home/home_screen_viewmodel.dart';
 import 'package:flychat/util/values/dimens.dart';
+import 'package:intl/intl.dart';
 
 HomeScreenViewmodel viewmodel = HomeScreenViewmodel();
 
@@ -21,11 +22,11 @@ bottomSheetUi(BuildContext context) {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Profile Details',
+                'Profile',
                 style: TextStyle(
                   fontSize: Dimens.getDimen(22),
                   color: Colors.white,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(
@@ -46,14 +47,14 @@ Widget _userdetails(BuildContext context) {
     builder: (context, user, _) => Column(
       children: [
         IconButton(
-          onPressed: () => bottomSheetUi(context),
+          onPressed: () {},
           icon: user == null
               ? const CircularProgressIndicator()
               : ClipOval(
                   child: Image.network(
                     user.profilePictureUrl,
-                    width: Dimens.getDimen(130),
-                    height: Dimens.getDimen(130),
+                    width: Dimens.getDimen(110),
+                    height: Dimens.getDimen(110),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -82,7 +83,7 @@ Widget _activeStatus(BuildContext context, UserModel user) {
         'Active_Status:',
         style: TextStyle(
           fontWeight: FontWeight.w400,
-          fontSize: Dimens.getDimen(17),
+          fontSize: Dimens.getDimen(15),
         ),
       ),
       const Spacer(),
@@ -90,7 +91,7 @@ Widget _activeStatus(BuildContext context, UserModel user) {
         'active',
         style: TextStyle(
           fontWeight: FontWeight.w400,
-          fontSize: Dimens.getDimen(17),
+          fontSize: Dimens.getDimen(15),
         ),
       ),
     ],
@@ -104,7 +105,7 @@ Widget _name(BuildContext context, UserModel user) {
         'Name:',
         style: TextStyle(
           fontWeight: FontWeight.w400,
-          fontSize: Dimens.getDimen(17),
+          fontSize: Dimens.getDimen(15),
         ),
       ),
       const Spacer(),
@@ -112,7 +113,7 @@ Widget _name(BuildContext context, UserModel user) {
         user.username,
         style: TextStyle(
           fontWeight: FontWeight.w400,
-          fontSize: Dimens.getDimen(17),
+          fontSize: Dimens.getDimen(15),
         ),
       ),
     ],
@@ -126,15 +127,15 @@ Widget _createdAt(BuildContext context, UserModel user) {
         'Created_At:',
         style: TextStyle(
           fontWeight: FontWeight.w400,
-          fontSize: Dimens.getDimen(17),
+          fontSize: Dimens.getDimen(15),
         ),
       ),
       const Spacer(),
       Text(
-        user.createdAt.substring(0, 10),
+        DateFormat('yMMMd').format(user.createdAt!).toString() ?? "",
         style: TextStyle(
           fontWeight: FontWeight.w400,
-          fontSize: Dimens.getDimen(17),
+          fontSize: Dimens.getDimen(15),
         ),
       ),
     ],

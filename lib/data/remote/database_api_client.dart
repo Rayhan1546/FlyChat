@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:io';
-import 'package:flychat/data/response_models/message_model.dart';
 import 'package:flychat/data/response_models/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -104,10 +104,10 @@ class DatabaseApiClient {
     if (currentUser == null) throw Exception('No current User found');
 
     final response = await _supabase
-        .from('chat_rooms')
+        .from('chat_room')
         .select()
-        .or('user1_id.eq.${currentUser.id},user2_id.eq.${currentUser.id}')
-        .or('user1_id.eq.$userId,user2_id.eq.$userId')
+        .or('sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}')
+        .or('sender_id.eq.$userId,receiver_id.eq.$userId')
         .execute();
 
     if (response.error != null) {
@@ -118,18 +118,18 @@ class DatabaseApiClient {
 
     final chatRoom = rooms.firstWhere(
         (room) =>
-            (room['user1_id'] == currentUser.id &&
-                room['user2_id'] == userId) ||
-            (room['user1_id'] == userId && room['user2_id'] == currentUser.id),
+            (room['sender_id'] == currentUser.id &&
+                room['receiver_id'] == userId) ||
+            (room['sender_id'] == userId && room['receiver_id'] == currentUser.id),
         orElse: () => null);
 
     if (chatRoom != null) {
       return chatRoom['id'];
     }
 
-    final insertResponse = await _supabase.from('chat_rooms').insert({
-      'user1_id': currentUser.id,
-      'user2_id': userId,
+    final insertResponse = await _supabase.from('chat_room').insert({
+      'sender_id': currentUser.id,
+      'receiver_id': userId,
     }).execute();
 
     if (insertResponse.error != null) {
@@ -138,38 +138,5 @@ class DatabaseApiClient {
     }
 
     return insertResponse.data[0]['id'];
-  }
-
-  Future<List<MessageModel>> getMessagesUsingRoomId(String roomId) async {
-    final response = await _supabase
-        .from('messages')
-        .select()
-        .eq('chat_room_id', roomId)
-        .order('created_at', ascending: true)
-        .execute();
-
-    if (response.error != null) {
-      print('Error fetching messages: ${response.error!.message}');
-      return [];
-    }
-
-    final data = List<Map<String, dynamic>>.from(response.data);
-    return data.map((map) => MessageModel.fromMap(map)).toList();
-  }
-
-  Future<bool> sendMessage(MessageModel message) async {
-    final currentUser = _supabase.auth.currentUser;
-
-    if (currentUser == null) throw Exception('No current User found');
-
-    final response = await _supabase.from('messages').insert({
-      'sender_id': currentUser.id,
-      'receiver_id': message.receiverId,
-      'content': message.content,
-      'chat_room_id': message.chatRoomId,
-    }).execute();
-
-    if (response.error == null) return true;
-    return false;
   }
 }

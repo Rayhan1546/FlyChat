@@ -1,9 +1,7 @@
-import 'package:intl/intl.dart';
-
 class UserModel {
   final String id;
   final String username;
-  final String createdAt;
+  final DateTime? createdAt;
   final String profilePictureUrl;
 
   UserModel({
@@ -17,7 +15,9 @@ class UserModel {
     return UserModel(
       id: map['id'],
       username: map['username'],
-      createdAt: map['created_at'],
+      createdAt: DateTime.parse(
+        map['created_at'],
+      ),
       profilePictureUrl: map['profile_picture_url'],
     );
   }
@@ -26,7 +26,7 @@ class UserModel {
     return {
       'id': id,
       'username': username,
-      'created_at': DateFormat('yMMMd').format(createdAt as DateTime),
+      'created_at': createdAt?.toIso8601String(),
       'profile_picture_url': profilePictureUrl,
     };
   }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flychat/data/remote/database_api_client.dart';
 import 'package:flychat/data/repository/database_repository/database_repository.dart';
@@ -42,20 +43,5 @@ class DatabaseRepoImpl extends DatabaseRepository {
   Future<String?> getChatRoomId(String userId) async {
     final roomId = await databaseApiClient.getOrCreateChatRoom(userId);
     return roomId;
-  }
-
-  @override
-  Future<bool> sendMessage(MessageModel messages) async {
-    final databaseResponse = await databaseApiClient.sendMessage(messages);
-
-    return databaseResponse;
-  }
-
-  @override
-  Future<List<MessageModel>> getMessage(String roomId) async {
-    final databaseResponse =
-        await databaseApiClient.getMessagesUsingRoomId(roomId);
-
-    return databaseResponse;
   }
 }

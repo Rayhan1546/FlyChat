@@ -17,14 +17,14 @@ class MessageModel {
 
   factory MessageModel.fromMap(Map<String, dynamic> map) {
     return MessageModel(
-      id: map['id'],
-      senderId: map['sender_id'],
-      receiverId: map['receiver_id'],
-      content: map['content'],
-      createdAt: DateTime.parse(
-        map['created_at'],
-      ),
-      chatRoomId: map['chat_room_id'],
+      id: map['id'] as String?,
+      senderId: map['sender_id'] as String?,
+      receiverId: map['receiver_id'] as String?,
+      content: map['content'] as String?,
+      createdAt: map['created_at'] != null
+          ? DateTime.parse(map['created_at'] as String)
+          : null,
+      chatRoomId: map['chat_room_id'] as String?,
     );
   }
 
