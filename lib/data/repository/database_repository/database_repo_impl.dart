@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flychat/data/remote/database_api_client.dart';
 import 'package:flychat/data/repository/database_repository/database_repository.dart';
-import 'package:flychat/data/response_models/message_model.dart';
 import 'package:flychat/data/response_models/user_model.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DatabaseRepoImpl extends DatabaseRepository {
   DatabaseApiClient databaseApiClient = DatabaseApiClient();

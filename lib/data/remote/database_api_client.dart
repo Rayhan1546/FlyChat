@@ -120,7 +120,8 @@ class DatabaseApiClient {
         (room) =>
             (room['sender_id'] == currentUser.id &&
                 room['receiver_id'] == userId) ||
-            (room['sender_id'] == userId && room['receiver_id'] == currentUser.id),
+            (room['sender_id'] == userId &&
+                room['receiver_id'] == currentUser.id),
         orElse: () => null);
 
     if (chatRoom != null) {

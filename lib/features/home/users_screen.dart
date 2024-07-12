@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flychat/features/chat_page/widgets/chat_screen_arguments.dart';
 import 'package:flychat/features/home/home_screen_viewmodel.dart';
 import 'package:flychat/features/home/widgets/drawer.dart';
 import 'package:flychat/util/values/dimens.dart';

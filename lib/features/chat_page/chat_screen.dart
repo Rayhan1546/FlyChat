@@ -20,7 +20,6 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    //viewmodel.resetCounter(widget.roomId);
     viewmodel.fetchUserData(widget.receiverId);
     viewmodel.fetchMessage(widget.roomId);
   }
@@ -56,58 +55,62 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _topView(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: viewmodel.userData,
-        builder: (context, user, _) => Transform.translate(
-              offset: const Offset(-10, 0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+      valueListenable: viewmodel.userData,
+      builder: (context, user, _) => Transform.translate(
+        offset: const Offset(-10, 0),
+        child: GestureDetector(
+          onTap: () => Navigator.pushNamed(context, '/profile_view'),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(
+                  size: Dimens.getDimen(30),
+                  Icons.arrow_back,
+                ),
+              ),
+              Container(
+                width: Dimens.getDimen(35),
+                height: Dimens.getDimen(35),
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(15),
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      user?.profilePictureUrl ?? '',
+                    ),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              SizedBox(width: Dimens.getDimen(15)),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: Icon(
-                      size: Dimens.getDimen(30),
-                      Icons.arrow_back,
+                  Text(
+                    user?.username ?? '',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Dimens.getDimen(14),
                     ),
                   ),
-                  Container(
-                    width: Dimens.getDimen(35),
-                    height: Dimens.getDimen(35),
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(15),
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          user?.profilePictureUrl ?? '',
-                        ),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: Dimens.getDimen(15)),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        user?.username ?? '',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: Dimens.getDimen(14),
-                        ),
-                      ),
-                      const Text('Active Now'),
-                    ],
-                  ),
-                  const Spacer(),
-                  const Icon(Icons.call),
-                  const SizedBox(width: 15),
-                  Icon(
-                    Icons.video_call,
-                    size: Dimens.getDimen(30),
-                  )
+                  const Text('Active Now'),
                 ],
               ),
-            ));
+              const Spacer(),
+              const Icon(Icons.call),
+              const SizedBox(width: 15),
+              Icon(
+                Icons.video_call,
+                size: Dimens.getDimen(30),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _userMessages(BuildContext context) {
@@ -119,15 +122,28 @@ class _ChatScreenState extends State<ChatScreen> {
             return const Center(child: CircularProgressIndicator());
           }
 
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (viewmodel.scrollController.hasClients) {
+              viewmodel.scrollController.animateTo(
+                viewmodel.scrollController.position.maxScrollExtent,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOut,
+              );
+            }
+          });
+
+          const int maxMessagesToShow = 10;
+          final visibleMessages = messages.length > maxMessagesToShow
+              ? messages.sublist(messages.length - maxMessagesToShow)
+              : messages;
+
           return ListView.builder(
             controller: viewmodel.scrollController,
-            itemCount: messages.length,
+            itemCount: visibleMessages.length,
             itemBuilder: (context, index) {
               return ChatBubbles(
-                message: messages[index].content ?? '',
-                isSentByMe: messages[index].receiverId == widget.receiverId
-                    ? true
-                    : false,
+                message: visibleMessages[index].content ?? '',
+                isSentByMe: visibleMessages[index].receiverId == widget.receiverId,
               );
             },
           );
@@ -148,6 +164,8 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           child: TextField(
             controller: viewmodel.messageController,
+            minLines: 1,
+            maxLines: null,
             decoration: const InputDecoration(
               fillColor: Colors.black12,
               border: InputBorder.none,
