@@ -1,3 +1,6 @@
+import java.util.regex.Pattern
+import java.util.regex.Matcher
+
 plugins {
     id "com.android.application"
     id "kotlin-android"
@@ -21,6 +24,30 @@ if (flutterVersionCode == null) {
 def flutterVersionName = localProperties.getProperty("flutter.versionName")
 if (flutterVersionName == null) {
     flutterVersionName = "1.0"
+}
+
+def getCurrentFlavor() {
+    Gradle gradle = getGradle()
+    String tskReqStr = gradle.getStartParameter().getTaskRequests().toString()
+    Pattern pattern
+    if (tskReqStr.contains("assemble"))
+        pattern = Pattern.compile("assemble(\\w+)(Release|Debug)")
+    else if (tskReqStr.contains("bundle"))
+        pattern = Pattern.compile("bundle(\\w+)(Release|Debug)")
+    else
+        pattern = Pattern.compile("generate(\\w+)(Release|Debug)")
+    Matcher matcher = pattern.matcher(tskReqStr)
+    if (matcher.find())
+        return matcher.group(1).toLowerCase()
+    else {
+        println "NO MATCH FOUND"
+        return ""
+    }
+}
+
+flutter {
+    source = "../.."
+    target "lib/main/main_" + getCurrentFlavor() + ".dart"
 }
 
 android {
@@ -51,8 +78,31 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+
+    flavorDimensions "env"
+
+    productFlavors {
+        flavor_dev {
+            dimension "env"
+            applicationId "com.example.flychat_dev"
+            resValue "string", "app_name", "Flychat Dev"
+        }
+        flavor_test {
+            dimension "env"
+            applicationId "com.example.flychat_test"
+            resValue "string", "app_name", "Flychat Test"
+        }
+        flavor_staging {
+            dimension "env"
+            applicationId "com.example.flychat_staging"
+            resValue "string", "app_name", "Flychat Staging"
+        }
+        flavor_prod {
+            dimension "env"
+            applicationId "com.example.flychat"
+            resValue "string", "app_name", "Flychat"
+        }
+    }
 }
 
-flutter {
-    source = "../.."
-}
+dependencies {}

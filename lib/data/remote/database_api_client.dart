@@ -6,7 +6,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class DatabaseApiClient {
   final SupabaseClient _supabase = Supabase.instance.client;
 
-  Future<bool> insertDataIntoProfile(String name, String imageUrl) async {
+  Future<bool> insertDataIntoProfile(
+      String name, String imageUrl, String description) async {
     final userId = _supabase.auth.currentUser?.id;
 
     if (userId == null) {
@@ -18,6 +19,7 @@ class DatabaseApiClient {
       'id': userId,
       'username': name,
       'profile_picture_url': imageUrl,
+      'description': description,
     }).execute();
 
     if (response.error != null) {
