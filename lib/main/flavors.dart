@@ -46,7 +46,6 @@ class F {
       default:
         fileName += '/.env';
     }
-    print(fileName);
     return await dotenv.load(fileName: fileName);
   }
 }

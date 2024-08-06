@@ -14,7 +14,6 @@ class AppRoutes {
 
   static void isUserLoggedIn(bool logged) {
     initialRoute = logged ? '/home' : 'login';
-    //initialRoute = '/profile';
   }
 
   static final routes = {

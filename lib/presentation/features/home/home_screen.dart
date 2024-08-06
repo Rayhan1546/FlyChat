@@ -3,7 +3,7 @@ import 'package:flychat/presentation/features/home/home_screen_viewmodel.dart';
 import 'package:flychat/presentation/features/home/widgets/bottom_navigation_item.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
